@@ -4,7 +4,8 @@ const categorySchema = Schema({
     title: {
         type: String,
         trim: true,
-        required: [true, 'title required']
+        required: [true, 'title required'],
+        unique: true
     }
 }, { versionKey: false })
 

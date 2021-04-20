@@ -15,5 +15,6 @@ app.use(express.json())
 app.get('/', (req, res) => res.status(200).json({message: 'working'}))
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/job', require('./routes/job.routes'))
+app.use('/api/category', require('./routes/category.routes'))
 
 module.exports = app

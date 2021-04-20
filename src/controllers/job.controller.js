@@ -47,7 +47,8 @@ exports.createJob = async (req, res) => {
         category
     } = req.body
 
-    if (req.user.role != 'poster') return res.status(401).json({ok: false, msg: 'user must be poster'})
+    if (req.user.role != 'poster') 
+        return res.status(401).json({ok: false, msg: 'user must be poster'})
 
     try {
         let _cat = Category.findOne({_id: category})
@@ -80,7 +81,8 @@ exports.createJob = async (req, res) => {
 // @route       PUT /api/job
 // @access      private POSTER ADMIN
 exports.updateJob = async (req, res) => {
-    if (req.user.role != 'poster' || req.user.role != 'admin') return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
+    if (req.user.role != 'poster' && req.user.role != 'admin') 
+        return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
     try {
         
     } catch (error) {
@@ -93,7 +95,9 @@ exports.updateJob = async (req, res) => {
 // @route       DELETE /api/job/:id
 // @access      private POSTER ADMIN
 exports.deleteJob = async (req, res) => {
-    if (req.user.role != 'poster' || req.user.role != 'admin') return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
+    if (req.user.role != 'poster' && req.user.role != 'admin') 
+        return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
+
     try {
         
     } catch (error) {
