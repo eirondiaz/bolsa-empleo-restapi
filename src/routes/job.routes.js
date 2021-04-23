@@ -3,9 +3,11 @@ const router = Router()
 const jobCtrl = require('../controllers/job.controller')
 const { authMdlw } = require('../middlewares/auth.middleware')
 
-router.get('/', authMdlw, jobCtrl.getAllJobs)
+router.get('/', jobCtrl.getAllJobs)
 
-router.get('/:id', authMdlw, jobCtrl.getJobById)
+router.get('/:id', jobCtrl.getJobById)
+
+router.get('/owner', authMdlw, jobCtrl.getAllJobsByOwner)
 
 router.post('/', authMdlw, jobCtrl.createJob)
 

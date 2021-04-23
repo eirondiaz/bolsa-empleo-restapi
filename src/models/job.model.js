@@ -53,7 +53,16 @@ const jobSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: [true, 'owner required']
+    },
+    views: {
+        type: Number,
+        default: 0
     }
 }, { versionKey: false })
+
+jobSchema.pre('remove', async function(next) {
+    await mongoose.model('Solicitud').deleteMany({job: this._id})
+    next()
+})
 
 module.exports = model('Job', jobSchema)

@@ -3,10 +3,12 @@ const Category = require('../models/category.model')
 
 // @desc        get all jobs
 // @route       GET /api/job
-// @access      private GLOBAL
+// @access      public
 exports.getAllJobs = async (req, res) => {
     try {
         let _jobs = await Job.find()
+            .populate('category')
+            .populate('owner')
 
         return res.status(200).json({ok: true, data: _jobs})
 
@@ -18,12 +20,34 @@ exports.getAllJobs = async (req, res) => {
 
 // @desc        get a job by id
 // @route       GET /api/job/:id
-// @access      private GLOBAL
+// @access      public
 exports.getJobById = async (req, res) => {
     try {
         let _job = await Job.findOne({_id: req.params.id})
+            .populate('category')
+            .populate('owner')
 
         return res.status(200).json({ok: true, data: _job})
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+}
+
+// @desc        get all jobs by owner
+// @route       GET /api/job/owner
+// @access      private POSTER
+exports.getAllJobsByOwner = async (req, res) => {
+    try {
+        if (req.user.role !== 'poster') 
+            return res.status(401).json({ok: false, msg: 'role must be poster'})
+
+        const _jobs = await Job.find({owner: req.user._id})
+            .populate('category')
+            .populate('owner')
+
+        return res.status(200).json({ok: true, data: _jobs})
 
     } catch (error) {
         console.log(error)
