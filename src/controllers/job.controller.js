@@ -41,7 +41,7 @@ exports.getJobById = async (req, res) => {
 exports.getAllJobsByOwner = async (req, res) => {
     try {
         if (req.user.role !== 'poster') 
-            return res.status(401).json({ok: false, msg: 'role must be poster'})
+            return res.status(403).json({ok: false, msg: 'role must be poster'})
 
         const _jobs = await Job.find({owner: req.user._id})
             .populate('category')
@@ -72,7 +72,7 @@ exports.createJob = async (req, res) => {
     } = req.body
 
     if (req.user.role != 'poster') 
-        return res.status(401).json({ok: false, msg: 'user must be poster'})
+        return res.status(403).json({ok: false, msg: 'user must be poster'})
 
     try {
         let _cat = Category.findOne({_id: category})
@@ -106,9 +106,12 @@ exports.createJob = async (req, res) => {
 // @access      private POSTER ADMIN
 exports.updateJob = async (req, res) => {
     if (req.user.role != 'poster' && req.user.role != 'admin') 
-        return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
+        return res.status(403).json({ok: false, msg: 'user must be poster or admin'})
+
     try {
-        
+        const _job = await Job.findByIdAndUpdate(req.body._id, req.body, { new: true })
+
+        return res.status(200).json({ok: true, data: _job})
     } catch (error) {
         console.log(error)
         return res.status(500).json(error)
@@ -120,10 +123,35 @@ exports.updateJob = async (req, res) => {
 // @access      private POSTER ADMIN
 exports.deleteJob = async (req, res) => {
     if (req.user.role != 'poster' && req.user.role != 'admin') 
-        return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
+        return res.status(403).json({ok: false, msg: 'user must be poster or admin'})
 
     try {
-        
+        const jobDeleted = await Job.findById(req.params.id)
+
+        if (!jobDeleted) return res.status(404).json({ok: false, msg: 'job not found'})
+
+        await jobDeleted.remove()
+        return res.status(200).json({ok: true, data: jobDeleted})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+}
+
+// @desc        update view job
+// @route       PUT /api/job/:id/view
+// @access      public
+exports.updateViewJob = async (req, res) => {
+    try {
+        const __job = await Job.findOne({_id: req.params.id})
+
+        if (!__job) return res.status(404).json({ok: false, msg: 'job not found'})
+
+        const views = __job.views + 1
+
+        const _job = await Job.findByIdAndUpdate(req.params.id, {views}, { new: true })
+
+        return res.status(200).json({ok: true, data: _job})
     } catch (error) {
         console.log(error)
         return res.status(500).json(error)

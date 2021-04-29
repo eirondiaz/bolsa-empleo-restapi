@@ -1,10 +1,10 @@
 const express = require('express')
 const cors = require('cors')
 require('./database')
-require('dotenv').config()
 
 //settings
 const app = express()
+require('dotenv').config()
 app.set('port', process.env.PORT || 3500)
 
 //middlewares
