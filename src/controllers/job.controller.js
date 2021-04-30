@@ -12,9 +12,8 @@ exports.getAllJobs = async (req, res) => {
         populate: ['category', 'owner']
     }
 
-    const URL = `http://localhost:${process.env.PORT}`
-    console.log(process.env.NODE_ENV)
-    if (process.env.NODE_ENV === 'production')
+    let URL = `http://localhost:${process.env.PORT}`
+    if (process.env.NODE_ENV !== 'development')
         URL = 'https://bolsa-empleo-dr.herokuapp.com'
 
     try {
