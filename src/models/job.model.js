@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const mongoosePaginate  = require('mongoose-paginate-v2')
 
 const jobSchema = Schema({
     title: {
@@ -59,6 +60,8 @@ const jobSchema = Schema({
         default: 0
     }
 }, { versionKey: false })
+
+jobSchema.plugin(mongoosePaginate)
 
 jobSchema.pre('remove', async function(next) {
     await mongoose.model('Solicitud').deleteMany({job: this._id})

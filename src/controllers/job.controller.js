@@ -5,10 +5,16 @@ const Category = require('../models/category.model')
 // @route       GET /api/job
 // @access      public
 exports.getAllJobs = async (req, res) => {
+    const options = {
+        limit: Number(req.query.limit) || 10,
+        offset: Number(req.query.offset) || 0,
+        page: Number(req.query.page) || 1,
+        pagination: req.query.pagination || true,
+        populate: ['category', 'owner']
+    }
+
     try {
-        let _jobs = await Job.find()
-            .populate('category')
-            .populate('owner')
+        let _jobs = await Job.paginate({}, options)
 
         return res.status(200).json({ok: true, data: _jobs})
 
