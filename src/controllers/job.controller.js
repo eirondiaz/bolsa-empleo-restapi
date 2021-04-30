@@ -6,15 +6,24 @@ const Category = require('../models/category.model')
 // @access      public
 exports.getAllJobs = async (req, res) => {
     const options = {
-        limit: Number(req.query.limit) || 10,
-        offset: Number(req.query.offset) || 0,
         page: Number(req.query.page) || 1,
+        limit: Number(req.query.limit) || 10,
         pagination: req.query.pagination || true,
         populate: ['category', 'owner']
     }
 
+    const URL = `http://localhost:${process.env.PORT}`
+    if (!process.env.NODE_ENV === 'development')
+        URL = 'https://bolsa-empleo-dr.herokuapp.com'
+
     try {
         let _jobs = await Job.paginate({}, options)
+
+        if (_jobs.hasNextPage)
+            _jobs.nextPage = `${URL}/api/v1/job?page=${options.page + 1}&limit=${options.limit}`
+
+        if (_jobs.hasPrevPage)
+            _jobs.prevPage = `${URL}/api/v1/job?page=${options.page - 1}&limit=${options.limit}`
 
         return res.status(200).json({ok: true, data: _jobs})
 
