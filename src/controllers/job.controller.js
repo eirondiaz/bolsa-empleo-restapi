@@ -172,3 +172,24 @@ exports.updateViewJob = async (req, res) => {
         return res.status(500).json(error)
     }
 }
+
+// @desc        get jobs by category
+// @route       GET /api/v1/job/category/:ctgrtittle
+// @access      public
+exports.getJobsByCategory = async (req, res) => {
+    try {
+        let title = req.params.ctgrtittle
+        title = title.trim().toLowerCase() 
+        
+        const _ctgry = await Category.findOne({title})
+
+        //if (!_ctgry) return res.status(404).json({ok: false, msg: ''})
+
+        const _jobs = await Job.find({category: _ctgry._id || '507f1f77bcf86cd799439011'})
+
+        return res.status(200).json({ok: true, data: _jobs})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+}

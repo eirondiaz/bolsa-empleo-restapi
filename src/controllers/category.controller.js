@@ -14,12 +14,12 @@ exports.getAllCategories = async (req, res) => {
     }
 }
 
-// @desc        get category by id
-// @route       GET /api/category/:id
+// @desc        get category by title
+// @route       GET /api/category/:title
 // @access      public
-exports.getCategoryById = async (req, res) => {
+exports.getCategoryByTitle = async (req, res) => {
     try {
-        const _ctgy = await Category.findOne({_id: req.params.id})
+        const _ctgy = await Category.findOne({title: req.params.title})
 
         return res.status(200).json({ok: true, data: _ctgy})
     } catch (error) {
@@ -33,7 +33,8 @@ exports.getCategoryById = async (req, res) => {
 // @access      private POSTER ADMIN
 exports.createCategory = async (req, res) => {
 
-    const { title } = req.body
+    let { title } = req.body
+    title = title.toLowerCase()
 
     if (req.user.role != 'poster' && req.user.role != 'admin') 
         return res.status(401).json({ok: false, msg: 'user must be poster or admin'})

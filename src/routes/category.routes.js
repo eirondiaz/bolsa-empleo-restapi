@@ -5,7 +5,7 @@ const ctgyCtrl = require('../controllers/category.controller')
 
 router.get('/', ctgyCtrl.getAllCategories)
 
-router.get('/:id', ctgyCtrl.getCategoryById)
+router.get('/:title', ctgyCtrl.getCategoryByTitle)
 
 router.post('/', authMdlw, ctgyCtrl.createCategory)
 
