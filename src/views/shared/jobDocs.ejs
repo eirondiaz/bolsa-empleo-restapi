@@ -130,111 +130,71 @@
 
 
 
-<h3 id="p-sort">Sort results</h3>
-<pre><code>fetch('<span class="c-api">https://fakestoreapi.com/products?sort=desc'</span>)
-    .then(res=>res.json())
-    .then(json=>console.log(json))</code></pre>
-<p>
-    <span class="tips">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-zap">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
-    </span>Default value is in ascending mode, you can use with 'desc' or 'asc' as you want.
-</p>
-<button class="show-output btn btn-outline">Show output</button>
-<pre class="output-result"><code>
-    <span class="c-comment">//output</span>
-[
-    {
-        id:30,
-        title:'...',
-        price:'...',
-        category:'...',
-        description:'...',
-        image:'...'
-    }
-    <span class="c-comment">/*...*/</span>
-    {
-        id:1,
-        title:'...',
-        price:'...',
-        category:'...',
-        description:'...',
-        image:'...'
-    }
-]
-</code></pre>
-
-
-
-<h3 id="p-categories">Get all categories</h3>
-<pre><code>fetch('<span class="c-api">https://fakestoreapi.com/products/categories'</span>)
+<h3 id="p-category">Get job by category</h3>
+<pre><code>fetch('<span class="c-api">https://bolsa-empleo-dr.herokuapp.com/api/v1/job/category/programmer'</span>)
     .then(res=>res.json())
     .then(json=>console.log(json))</code></pre>
 <button class="show-output btn btn-outline">Show output</button>
 <pre class="output-result"><code>
     <span class="c-comment">//output</span>
-    [
-    "electronics",
-    "jewelery",
-    "men clothing",
-    "women clothing"
-    ]
-</code></pre>
-
-
-
-<h3 id="p-category">Get products in a specific category</h3>
-<pre><code>fetch('<span class="c-api">https://fakestoreapi.com/products/category/jewelery'</span>)
-    .then(res=>res.json())
-    .then(json=>console.log(json))</code></pre>
-<p>
-    <span class="tips">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-zap">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
-    </span>You can also use limit(Number) and sort(asc|desc) as a query string to get your ideal results
-</p>
-<button class="show-output btn btn-outline">Show output</button>
-<pre class="output-result"><code>
-    <span class="c-comment">//output</span>
-[
     {
-        id:5,
-        title:'...',
-        price:'...',
-        category:'jewelery',
-        description:'...',
-        image:'...'
+        ok: true,
+        data: [
+            {
+                id:1,
+                title:'...',
+                company:'...',
+                type:'...',
+                logo:'...',
+                url:'...',
+                position:'...',
+                location:'...',
+                description:'...',
+                category:{...},
+                createdAt:'...',
+                owner:{...},
+                views:0
+            }
+            <span class="c-comment">/*...*/</span>
+            {
+                id:2,
+                title:'...',
+                company:'...',
+                type:'...',
+                logo:'...',
+                url:'...',
+                position:'...',
+                location:'...',
+                description:'...',
+                category:{...},
+                createdAt:'...',
+                owner:{...},
+                views:0
+            }
+        ]
     }
-    <span class="c-comment">/*...*/</span>
-    {
-        id:8,
-        title:'...',
-        price:'...',
-        category:'jewelery',
-        description:'...',
-        image:'...'
-    }
-]
 </code></pre>
-
 
 
 <h3 id="p-new">Add new product</h3>
-<pre><code>fetch('<span class="c-api">https://fakestoreapi.com/products'</span>,{
+<pre><code>fetch('<span class="c-api">https://bolsa-empleo-dr.herokuapp.com/api/v1/job'</span>,{
     method:"POST",
+    headers: {
+        "Authorization": "eyJhbGciOiJIUzI1NiIsInR"
+    },
     body:JSON.stringify(
         {
-            title: 'test product',
-            price: 13.5,
-            description: 'lorem ipsum set',
-            image: 'https://i.pravatar.cc',
-            category: 'electronic'
+            title:'...',
+            company:'...',
+            type:'...',
+            logo:'...',
+            url:'...',
+            position:'...',
+            location:'...',
+            description:'...',
+            category:'...',
+            createdAt:'...',
+            owner:'...'
         }
     )
 })
@@ -248,37 +208,52 @@
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
         </svg>
     </span>
-    If you send an object like the code above, it will return you an object with a new id. remember that nothing
-    in real will insert into the database. so if you want to access the new id you will get a 404 error.
+    If you send an object like the code above, it will return you an object with a new id. To save a job, the user's role
+    must be 'poster'.
 </p>
 <button class="show-output btn btn-outline">Show output</button>
 <pre class="output-result"><code>
     <span class="c-comment">//output</span>
     {
-        id:31,
-        title:'...',
-        price:'...',
-        category:'...',
-        description:'...',
-        image:'...'
+        ok: true,
+        data: {
+            id:1,
+            title:'...',
+            company:'...',
+            type:'...',
+            logo:'...',
+            url:'...',
+            position:'...',
+            location:'...',
+            description:'...',
+            category:{...},
+            createdAt:'...',
+            owner:{...},
+            views:0
+        }
     }
 </code></pre>
 
 
 
 <h3 id="p-update">Update a product</h3>
-<pre><code>fetch('<span class="c-api">https://fakestoreapi.com/products/7'</span>,{
+<pre><code>fetch('<span class="c-api">https://bolsa-empleo-dr.herokuapp.com/api/v1/job'</span>,{
     method:"PUT",
     headers: {
         "Authorization": "eyJhbGciOiJIUzI1NiIsInR"
     }
     body:JSON.stringify(
         {
-            title: 'test product',
-            price: 13.5,
-            description: 'lorem ipsum set',
-            image: 'https://i.pravatar.cc',
-            category: 'electronic'
+            id:1
+            title:'...',
+            company:'...',
+            type:'...',
+            logo:'...',
+            url:'...',
+            position:'...',
+            location:'...',
+            description:'...',
+            category:'...'
         }
     )
 })
@@ -291,19 +266,29 @@
             class="feather feather-zap">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
         </svg>
-    </span>It will return you an object with sent id.
-    remember that nothing in real will update in the database.
+    </span>It will return you an object with sent id. To update a job, the user's role 
+    must be 'poster' and the job must the job's owner.
 </p>
 <button class="show-output btn btn-outline">Show output</button>
 <pre class="output-result"><code>
     <span class="c-comment">//output</span>
     {
-        id:7,
-        title:'new title',
-        price:'new price',
-        category:'new category',
-        description:'new description',
-        image:'new image url'
+        ok: true,
+        data: {
+            id:1,
+            title:'...',
+            company:'...',
+            type:'...',
+            logo:'...',
+            url:'...',
+            position:'...',
+            location:'...',
+            description:'...',
+            category:{...},
+            createdAt:'...',
+            owner:{...},
+            views:0
+        }
     }
 </code></pre>
 

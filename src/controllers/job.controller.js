@@ -123,8 +123,10 @@ exports.updateJob = async (req, res) => {
     if (req.user.role != 'poster' && req.user.role != 'admin') 
         return res.status(403).json({ok: false, msg: 'user must be poster or admin'})
 
+    let {owner, views, createdAt, ...data} = req.body
+    
     try {
-        const _job = await Job.findByIdAndUpdate(req.body._id, req.body, { new: true })
+        const _job = await Job.findByIdAndUpdate(req.body._id, data, { new: true })
 
         return res.status(200).json({ok: true, data: _job})
     } catch (error) {

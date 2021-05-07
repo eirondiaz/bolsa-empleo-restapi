@@ -4,13 +4,25 @@ const Solicitud = require('../models/solicitud.model')
 // @route       GET /api/solicitud
 // @access      private USER
 exports.getAllSolicitudByUser = async (req, res) => {
-    try {
-        if (req.user.role != 'user') 
-            return res.status(401).json({ok: false, msg: 'role must be user'})
+    if (req.user.role != 'user') 
+        return res.status(401).json({ok: false, msg: 'role must be user'})
 
-        const _solicitudes = await Solicitud.find({user: req.user._id})
-            .populate('user')
-            .populate('job')
+    const { sort } = req.query
+    
+    try {
+        let _solicitudes
+
+        if (sort === 'asc' || sort === 'desc') {
+            _solicitudes = await Solicitud.find({user: req.user._id})
+                .sort({createdAt: sort})
+                .populate('user')
+                .populate('job')
+        }
+        else {
+            _solicitudes = await Solicitud.find({user: req.user._id})
+                .populate('user')
+                .populate('job')
+        }
 
         return res.status(200).json({ok: true, data: _solicitudes})
     } catch (error) {
