@@ -37,7 +37,7 @@ exports.createCategory = async (req, res) => {
     title = title.toLowerCase()
 
     if (req.user.role != 'poster' && req.user.role != 'admin') 
-        return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
+        return res.status(403).json({ok: false, msg: 'user must be poster or admin'})
 
     try {
         const _ctgy = new Category({
@@ -60,7 +60,7 @@ exports.updateCategory = async (req, res) => {
     const { _id, title } = req.body
 
     if (req.user.role != 'poster' && req.user.role != 'admin') 
-        return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
+        return res.status(403).json({ok: false, msg: 'user must be poster or admin'})
 
     try {
         let _ctgyFind = await Category.findOne({_id})
@@ -77,19 +77,19 @@ exports.updateCategory = async (req, res) => {
 }
 
 // @desc        delete category
-// @route       DELETE /api/category/:id
+// @route       DELETE /api/category/:title
 // @access      private POSTER ADMIN
 exports.deleteCategory = async (req, res) => {
 
     if (req.user.role != 'poster' && req.user.role != 'admin') 
-        return res.status(401).json({ok: false, msg: 'user must be poster or admin'})
+        return res.status(403).json({ok: false, msg: 'user must be poster or admin'})
 
     try {
-        let _ctgyFind = await Category.findOne({_id: req.params.id})
+        let _ctgyFind = await Category.findOne({title: req.params.title})
 
         if (!_ctgyFind) return res.status(404).json({ok: false, msg: 'category not found'})
 
-        const ctgyDeleted = await Category.findByIdAndDelete(req.params.id)
+        const ctgyDeleted = await Category.findByIdAndDelete(_ctgyFind._id)
 
         if (!ctgyDeleted) return res.status(400).json({ok: false, msg: 'error'})
 

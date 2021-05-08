@@ -2,7 +2,7 @@ const Job = require('../models/job.model')
 const Category = require('../models/category.model')
 
 // @desc        get all jobs
-// @route       GET /api/job
+// @route       GET /api/v1/job
 // @access      public
 exports.getAllJobs = async (req, res) => {
     const options = {

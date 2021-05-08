@@ -1,10 +1,13 @@
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocs = require('./config/swagger-doc')
 require('./database')
 
 //settings
 const app = express()
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 require('dotenv').config()
 app.set('port', process.env.PORT || 3500)
 

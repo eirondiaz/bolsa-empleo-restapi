@@ -11,6 +11,6 @@ router.post('/', authMdlw, ctgyCtrl.createCategory)
 
 router.put('/', authMdlw, ctgyCtrl.updateCategory)
 
-router.delete('/:id', authMdlw, ctgyCtrl.deleteCategory)
+router.delete('/:title', authMdlw, ctgyCtrl.deleteCategory)
 
 module.exports = router
