@@ -182,12 +182,14 @@ exports.getJobsByCategory = async (req, res) => {
     try {
         let title = req.params.ctgrtittle
         title = title.trim().toLowerCase() 
-        
-        const _ctgry = await Category.findOne({title})
+     
+        let _ctgry = {_id: ''}
+        _ctgry = await Category.findOne({title})
 
-        //if (!_ctgry) return res.status(404).json({ok: false, msg: ''})
+        if (!_ctgry) 
+            _ctgry._id = '507f1f77bcf86cd799439011'
 
-        const _jobs = await Job.find({category: _ctgry._id || '507f1f77bcf86cd799439011'})
+        const _jobs = await Job.find({category: _ctgry._id})
 
         return res.status(200).json({ok: true, data: _jobs})
     } catch (error) {

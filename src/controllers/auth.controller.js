@@ -8,6 +8,9 @@ const bcrypt = require('bcryptjs')
 exports.register = async (req, res) => {
     const { name, lastname, email, password, role } = req.body
     try {
+        if (role.toLowerCase() === 'admin')
+            return res.status(400).json({ok: false, msg: 'role admin cant be created'})
+
         let _user = await User.findOne({email})
 
         if (_user) return res.status(400).json({ok: false, msg: 'email repeated'})

@@ -31,11 +31,7 @@
     "tags": [
       {
         "name": "auth",
-        "description": "Authenticate users",
-        "externalDocs": {
-          "description": "Find out more",
-          "url": "http://swagger.io"
-        }
+        "description": "Authenticate users"
       },
       {
         "name": "user",
@@ -48,6 +44,10 @@
       {
         "name": "job",
         "description": "Operations about job"
+      },
+      {
+        "name": "solicitud",
+        "description": "Operations about solicitud"
       }
     ],
     "paths": {
@@ -83,10 +83,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ErrorResponse"
-                    }
+                    "$ref": "#/components/schemas/ErrorResponse"
                   }
                 }
               }
@@ -96,10 +93,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ErrorResponse"
-                    }
+                    "$ref": "#/components/schemas/ErrorResponse"
                   }
                 }
               }
@@ -348,10 +342,64 @@
               }
             },
             "403": {
-              "description": "Forbbiden - Your role is not allowed to realize this operation."
+              "description": "Forbbiden - Your role is not allowed to realize this operation.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
             },
             "404": {
-              "description": "Category not found"
+              "description": "Category not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/job/owner": {
+        "get": {
+          "tags": [
+            "job"
+          ],
+          "summary": "Get all jobs by owner",
+          "description": "This can only be done by the logged in user with role \"poster\".",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "token",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_4"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthpized"
+            },
+            "403": {
+              "description": "Forbbiden - Your role is not allowed to realize this operation."
             }
           }
         }
@@ -392,7 +440,79 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/inline_response_200_4"
+                    "$ref": "#/components/schemas/inline_response_200_5"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "job"
+          ],
+          "summary": "Update a job",
+          "description": "This can only be done by the logged in user with role \"poster\" or \"admin\".",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "token",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_6"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbbiden - Your role is not allowed to realize this operation.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Job not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
                   }
                 }
               }
@@ -434,230 +554,45 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/inline_response_201_1"
+                    "$ref": "#/components/schemas/inline_response_200_6"
                   }
                 }
               }
             },
             "401": {
-              "description": "Unauthorized"
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
             },
             "403": {
-              "description": "Forbbiden - Your role is not allowed to realize this operation."
-            }
-          }
-        }
-      },
-      "/user": {
-        "post": {
-          "deprecated": true,
-          "tags": [
-            "user"
-          ],
-          "summary": "Create user",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "createUser",
-          "requestBody": {
-            "description": "Created user object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            },
-            "required": true
-          },
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/user/createWithArray": {
-        "post": {
-          "deprecated": true,
-          "tags": [
-            "user"
-          ],
-          "summary": "Creates list of users with given input array",
-          "operationId": "createUsersWithArrayInput",
-          "requestBody": {
-            "$ref": "#/components/requestBodies/UserArray"
-          },
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/user/createWithList": {
-        "post": {
-          "deprecated": true,
-          "tags": [
-            "user"
-          ],
-          "summary": "Creates list of users with given input array",
-          "operationId": "createUsersWithListInput",
-          "requestBody": {
-            "$ref": "#/components/requestBodies/UserArray"
-          },
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/user/login": {
-        "get": {
-          "deprecated": true,
-          "tags": [
-            "user"
-          ],
-          "summary": "Logs user into the system",
-          "operationId": "loginUser",
-          "parameters": [
-            {
-              "name": "username",
-              "in": "query",
-              "description": "The user name for login",
-              "required": true,
-              "style": "form",
-              "explode": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "password",
-              "in": "query",
-              "description": "The password for login in clear text",
-              "required": true,
-              "style": "form",
-              "explode": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "headers": {
-                "X-Rate-Limit": {
-                  "description": "calls per hour allowed by the user",
-                  "style": "simple",
-                  "explode": false,
-                  "schema": {
-                    "type": "integer",
-                    "format": "int32"
-                  }
-                },
-                "X-Expires-After": {
-                  "description": "date in UTC when token expires",
-                  "style": "simple",
-                  "explode": false,
-                  "schema": {
-                    "type": "string",
-                    "format": "date-time"
-                  }
-                }
-              },
+              "description": "Forbbiden - Your role is not allowed to realize this operation.",
               "content": {
                 "application/json": {
                   "schema": {
-                    "type": "string"
-                  }
-                },
-                "application/xml": {
-                  "schema": {
-                    "type": "string"
+                    "$ref": "#/components/schemas/ErrorResponse"
                   }
                 }
               }
-            },
-            "400": {
-              "description": "Invalid username/password supplied"
             }
           }
         }
       },
-      "/user/logout": {
-        "get": {
-          "deprecated": true,
-          "tags": [
-            "user"
-          ],
-          "summary": "Logs out current logged in user session",
-          "operationId": "logoutUser",
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/user/{username}": {
-        "get": {
-          "deprecated": true,
-          "tags": [
-            "user"
-          ],
-          "summary": "Get user by user name",
-          "operationId": "getUserByName",
-          "parameters": [
-            {
-              "name": "username",
-              "in": "path",
-              "description": "The name that needs to be fetched. Use user1 for testing.",
-              "required": true,
-              "style": "simple",
-              "explode": false,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                },
-                "application/xml": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Invalid username supplied"
-            },
-            "404": {
-              "description": "User not found"
-            }
-          }
-        },
+      "/api/v1/job/{id}/view": {
         "put": {
-          "deprecated": true,
           "tags": [
-            "user"
+            "job"
           ],
-          "summary": "Updated user",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "updateUser",
+          "summary": "Update view job",
           "parameters": [
             {
-              "name": "username",
+              "name": "id",
               "in": "path",
-              "description": "name that need to be updated",
+              "description": "id job",
               "required": true,
               "style": "simple",
               "explode": false,
@@ -666,39 +601,84 @@
               }
             }
           ],
-          "requestBody": {
-            "description": "Updated user object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_6"
+                  }
                 }
               }
             },
-            "required": true
-          },
-          "responses": {
-            "400": {
-              "description": "Invalid user supplied"
-            },
             "404": {
-              "description": "User not found"
+              "description": "Job not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/job/{id}": {
+        "get": {
+          "tags": [
+            "job"
+          ],
+          "summary": "Get a single job by id",
+          "description": "This can only be done by the logged in user with role \"poster\" or \"admin\".",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The job's id",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_7"
+                  }
+                }
+              }
             }
           }
         },
         "delete": {
-          "deprecated": true,
           "tags": [
-            "user"
+            "job"
           ],
-          "summary": "Delete user",
-          "description": "This can only be done by the logged in user.",
-          "operationId": "deleteUser",
+          "summary": "Delete a job",
           "parameters": [
             {
-              "name": "username",
+              "name": "id",
               "in": "path",
-              "description": "The name that needs to be deleted",
+              "description": "The job's id",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "token",
               "required": true,
               "style": "simple",
               "explode": false,
@@ -708,11 +688,341 @@
             }
           ],
           "responses": {
-            "400": {
-              "description": "Invalid username supplied"
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_7"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbbiden - Your role is not allowed to realize this operation.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
             },
             "404": {
-              "description": "User not found"
+              "description": "Job not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/job/category/{ctgrtittle}": {
+        "get": {
+          "tags": [
+            "job",
+            "category"
+          ],
+          "summary": "Get jobs by category",
+          "parameters": [
+            {
+              "name": "ctgrtittle",
+              "in": "path",
+              "description": "category title",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_4"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/solicitud": {
+        "get": {
+          "tags": [
+            "solicitud"
+          ],
+          "summary": "Get all solicitudes by user logged",
+          "description": "This can only be done by the logged in user with role \"user\".",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "token",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort by createdAt (asc | desc)",
+              "required": false,
+              "style": "form",
+              "explode": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_8"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbbiden - Your role is not allowed to realize this operation.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "solicitud"
+          ],
+          "summary": "Create solicitud",
+          "description": "This can only be done by the logged in user with role \"user\".",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "token",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Solicitud"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_9"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbbiden - Your role is not allowed to realize this operation.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/solicitud/{id}": {
+        "get": {
+          "tags": [
+            "solicitud"
+          ],
+          "summary": "Get a single solicitud",
+          "description": "This can only be done by the logged in user with role \"user\".",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "token",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "description": "solicitud's id",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_9"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbbiden - Your role is not allowed to realize this operation.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/job/{idjob}/solicitud": {
+        "get": {
+          "tags": [
+            "solicitud",
+            "job"
+          ],
+          "summary": "Get all solicitudes by job id",
+          "description": "This can only be done by the logged in user with role \"poster\".",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "token",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "idjob",
+              "in": "path",
+              "description": "the job's id",
+              "required": true,
+              "style": "simple",
+              "explode": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/inline_response_200_8"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbbiden - Your role is not allowed to realize this operation.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
             }
           }
         }
@@ -849,6 +1159,27 @@
             "name": "User"
           }
         },
+        "Solicitud": {
+          "required": [
+            "job",
+            "user"
+          ],
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "user": {
+              "type": "string"
+            },
+            "job": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            }
+          }
+        },
         "ApiResponse": {
           "type": "object",
           "properties": {
@@ -873,6 +1204,181 @@
             },
             "msg": {
               "type": "string"
+            }
+          }
+        },
+        "inline_response_200": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "token": {
+              "type": "string"
+            }
+          }
+        },
+        "inline_response_201": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "data": {
+              "$ref": "#/components/schemas/User"
+            },
+            "token": {
+              "type": "string"
+            }
+          }
+        },
+        "inline_response_200_1": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
+        },
+        "inline_response_200_2": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean",
+              "default": true
+            },
+            "data": {
+              "$ref": "#/components/schemas/Category"
+            }
+          }
+        },
+        "inline_response_200_3": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "data": {
+              "$ref": "#/components/schemas/Category"
+            }
+          }
+        },
+        "inline_response_200_4": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Job"
+              }
+            }
+          }
+        },
+        "inline_response_200_5": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "data": {
+              "$ref": "#/components/schemas/inline_response_200_5_data"
+            },
+            "totalDocs": {
+              "type": "integer"
+            },
+            "limit": {
+              "type": "integer"
+            },
+            "totalPages": {
+              "type": "integer"
+            },
+            "page": {
+              "type": "integer"
+            },
+            "pagingCounter": {
+              "type": "integer"
+            },
+            "hasPrevPage": {
+              "type": "boolean"
+            },
+            "hasNextPage": {
+              "type": "boolean"
+            },
+            "prevPage": {
+              "type": "string"
+            },
+            "nextPage": {
+              "type": "string"
+            }
+          }
+        },
+        "inline_response_200_6": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean",
+              "default": true
+            },
+            "data": {
+              "$ref": "#/components/schemas/Job"
+            }
+          }
+        },
+        "inline_response_200_7": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "data": {
+              "$ref": "#/components/schemas/Job"
+            }
+          }
+        },
+        "inline_response_200_8": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean",
+              "default": true
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Solicitud"
+              }
+            }
+          }
+        },
+        "inline_response_200_9": {
+          "type": "object",
+          "properties": {
+            "ok": {
+              "type": "boolean",
+              "default": true
+            },
+            "data": {
+              "$ref": "#/components/schemas/Solicitud"
+            }
+          }
+        },
+        "inline_response_200_5_data": {
+          "type": "object",
+          "properties": {
+            "docs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Job"
+              }
             }
           }
         }

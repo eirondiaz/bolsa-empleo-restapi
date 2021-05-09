@@ -1,11 +1,11 @@
 const Solicitud = require('../models/solicitud.model')
 
 // @desc        get all solicitudes by user
-// @route       GET /api/solicitud
+// @route       GET /api/v1/solicitud
 // @access      private USER
 exports.getAllSolicitudByUser = async (req, res) => {
     if (req.user.role != 'user') 
-        return res.status(401).json({ok: false, msg: 'role must be user'})
+        return res.status(403).json({ok: false, msg: 'role must be user'})
 
     const { sort } = req.query
     
@@ -32,7 +32,7 @@ exports.getAllSolicitudByUser = async (req, res) => {
 }
 
 // @desc        get solicitud by id
-// @route       GET /api/solicitud/:id
+// @route       GET /api/v1/solicitud/:id
 // @access      private USER
 exports.getSolicitudById = async (req, res) => {
     try {
@@ -44,12 +44,12 @@ exports.getSolicitudById = async (req, res) => {
 }
 
 // @desc        get all solicitudes by job id
-// @route       GET /api/job/:idjob/solicitud
+// @route       GET /api/v1/job/:idjob/solicitud
 // @access      private POSTER
 exports.getAllSolicitudesByJobId = async (req, res) => {
     try {
         if (req.user.role !== 'poster') 
-            return res.status(401).json({ok: false, msg: 'role must be poster'})
+            return res.status(403).json({ok: false, msg: 'role must be poster'})
 
         const _solicitudes = await Solicitud.find({job: req.params.idjob})
 
@@ -61,12 +61,12 @@ exports.getAllSolicitudesByJobId = async (req, res) => {
 }
 
 // @desc        create solicitud
-// @route       POST /api/solicitud
+// @route       POST /api/v1/solicitud
 // @access      private USER
 exports.createSolicitud = async (req, res) => {
     try {
         if (req.user.role != 'user') 
-            return res.status(401).json({ok: false, msg: 'role must be user'})
+            return res.status(403).json({ok: false, msg: 'role must be user'})
 
         const newSolicitud = new Solicitud(req.body)
 
