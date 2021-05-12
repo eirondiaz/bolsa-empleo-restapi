@@ -34,7 +34,7 @@ exports.getAllJobs = async (req, res) => {
 }
 
 // @desc        get a job by id
-// @route       GET /api/job/:id
+// @route       GET /api/v1/job/:id
 // @access      public
 exports.getJobById = async (req, res) => {
     try {
@@ -51,7 +51,7 @@ exports.getJobById = async (req, res) => {
 }
 
 // @desc        get all jobs by owner
-// @route       GET /api/job/owner
+// @route       GET /api/v1/job/owner
 // @access      private POSTER
 exports.getAllJobsByOwner = async (req, res) => {
     try {
@@ -71,7 +71,7 @@ exports.getAllJobsByOwner = async (req, res) => {
 }
 
 // @desc        create a job
-// @route       POST /api/job
+// @route       POST /api/v1/job
 // @access      private POSTER
 exports.createJob = async (req, res) => {
     const {
@@ -117,7 +117,7 @@ exports.createJob = async (req, res) => {
 }
 
 // @desc        update a job
-// @route       PUT /api/job
+// @route       PUT /api/v1/job
 // @access      private POSTER ADMIN
 exports.updateJob = async (req, res) => {
     if (req.user.role != 'poster' && req.user.role != 'admin') 
@@ -136,7 +136,7 @@ exports.updateJob = async (req, res) => {
 }
 
 // @desc        delete a job
-// @route       DELETE /api/job/:id
+// @route       DELETE /api/v1/job/:id
 // @access      private POSTER ADMIN
 exports.deleteJob = async (req, res) => {
     if (req.user.role != 'poster' && req.user.role != 'admin') 
@@ -156,7 +156,7 @@ exports.deleteJob = async (req, res) => {
 }
 
 // @desc        update view job
-// @route       PUT /api/job/:id/view
+// @route       PUT /api/v1/job/:id/view
 // @access      public
 exports.updateViewJob = async (req, res) => {
     try {

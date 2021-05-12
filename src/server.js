@@ -24,7 +24,6 @@ app.set("views", path.join(__dirname, 'views'));
 app.disable("view cache");
 
 //routes
-//app.get('/', (req, res) => res.status(200).json({message: 'working'}))
 app.get('/', require('./routes/home.routes'))
 app.get('/docs', (req, res) => {
     res.render('home/docs')
